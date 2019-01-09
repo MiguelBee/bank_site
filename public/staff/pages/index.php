@@ -42,7 +42,7 @@
               </tr>
             <?php } ?>
         </table>
-        <?php mysqli_free_result($pages_set); ?>
+        <?php mysqli_free_result($page_set); ?>
     </div>
     
 </div>
