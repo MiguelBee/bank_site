@@ -6,21 +6,25 @@ if(!isset($_GET['id'])){
 }
 
 $id = $_GET['id'];
-$menu_name = '';
-$position = '';
-$visible = '';
 
-if(request_is_post()){
+  if(request_is_post()){
     //handle form values sent by new.php
-    $menu_name = $_POST['menu_name'] ?? '';
-    $position = $_POST['position'] ?? '';
-    $visible = $_POST['visible'] ?? '';
+    $page = [];
+    $page['id'] = $id;
+    $page['subject_id'] = $_POST['subject_id'] ?? '';
+    $page['menu_name'] = $_POST['menu_name'] ?? '';
+    $page['position'] = $_POST['position'] ?? '';
+    $page['visible'] = $_POST['visible'] ?? '';
+    $page['content'] = $_POST['content'] ?? '';
     
-    echo "Form parameters<br />";
-    echo "Menu name: " . $menu_name . "<br />";
-    echo "Position: " . $position . "<br ?>";
-    echo "Visible: " . $visible . "<br />";
-} 
+    $result = update_page($page);
+    redirect_to(url_for('/staff/pages/show.php?id=' . $id));
+  } else {
+    $page = find_page_by_id($id);
+    $page_set = find_all_pages();
+    $page_count = mysqli_num_rows($page_set);
+    mysqli_free_result($page_set);
+  }
 ?>
 
 <?php $page_title = "Edit Page"; ?>
@@ -36,14 +40,40 @@ if(request_is_post()){
     <!--action is what page the form gets sent to -->
     <form action="<?php echo url_for('/staff/pages/edit.php?id=' . h(u($id))); ?>" method="post">
       <dl>
+        <dt>Subject</dt>
+        <dd>
+          <select name="subject_id">
+            <?php
+              $subject_set = find_all_subjects();
+              while($subject = mysqli_fetch_assoc($subject_set)){
+                echo "<option value=\"" . h($subject['id']) . "\"";
+                if($page["subject_id"] == $subject['id']){
+                  echo " selected";
+                }
+                echo ">" . h($subject['menu_name']) . "</option>";
+              }
+              mysqli_free_result($subject_set);
+            ?>
+          </select>
+        </dd>
+      </dl>
+      <dl>
         <dt>Menu Name</dt>
-        <dd><input type="text" name="menu_name" value="<?php echo h($menu_name); ?>" /></dd>
+        <dd><input type="text" name="menu_name" value="<?php echo h($page['menu_name']); ?>" /></dd>
       </dl>
       <dl>
         <dt>Position</dt>
         <dd>
-          <select name="position" value="<?php echo $position; ?>">
-            <option value="1">1</option>
+          <select name="position">
+            <?php
+              for($i = 1; $i <= $page_count; $i++){
+                echo "<option value=\"{$i}\"";
+                if($page['position'] == $i){
+                  echo " selected";
+                }
+                echo ">{$i}</option>";
+              }
+            ?>
           </select>
         </dd>
       </dl>
@@ -51,8 +81,12 @@ if(request_is_post()){
         <dt>Visible</dt>
         <dd>
           <input type="hidden" name="visible" value="0" />
-          <input type="checkbox" name="visible" value="1" />
+          <input type="checkbox" name="visible" value="1" <?php if($page['visible'] == "1") { echo " checked"; } ?> />
         </dd>
+      </dl>
+      <dt>Content</dt>
+      <dl>
+        <textarea name="content" cols="60" rows="10"><?php echo h($page['content']); ?></textarea>
       </dl>
       <div id="operations">
         <input type="submit" value="Edit Page" />
