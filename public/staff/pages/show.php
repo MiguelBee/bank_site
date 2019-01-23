@@ -1,6 +1,5 @@
 <?php require_once('../../../private/initialize.php'); ?>
 
-
 <?php
 //$_GET automatically decodes from urlencode
 $id = $_GET['id'] ?? '1'; //null coalesce operator
@@ -22,6 +21,10 @@ $page = find_page_by_id($id);
         <div class="attributes">
             
             <?php $subject = find_subject_by_id($page['subject_id']); ?>
+            
+            <div class="actions">
+                <a class="action" href="<?php echo url_for('/index.php?id=' . h(u($page['id'])) . '&preview=true'); ?>" target="_blank">Preview</a>
+            </div>
             
             <dl>
                 <dt>Menu Name</dt>

@@ -19,6 +19,7 @@ $id = $_GET['id'];
     
     $result = update_page($page);
     if($result === true){
+      $_SESSION['status_message'] = "You have successfully updated the page";
       redirect_to(url_for('/staff/pages/show.php?id=' . $id)); 
     } else {
       $errors = $result;

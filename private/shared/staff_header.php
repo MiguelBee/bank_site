@@ -16,8 +16,14 @@
         </header>
         <navigation>
             <ul>
+                <li>User: <?php echo $_SESSION['username'] ?? ''; ?></li>
                 <li><a href="<?php echo url_for('/staff/index.php'); ?>">Menu</a></li>
-                <li></li>
-                <li></li>
+                <li><a href="<?php echo url_for('/staff/logout.php'); ?>">Log Out</a></li>
             </ul>
+            <?php
+                if(isset($_SESSION['status_message'])){
+                    echo $_SESSION['status_message'] ?? '';
+                    unset($_SESSION['status_message']);
+                }
+            ?>
         </navigation>

@@ -18,6 +18,7 @@ if(request_is_post()){
     $result = update_subject($subject);
     
     if($result === true){
+      $_SESSION['status_message'] = "You have successfully updated the subject";
       redirect_to(url_for('/staff/subjects/show.php?id=' . $id));
     } else {
       $errors = $result;
