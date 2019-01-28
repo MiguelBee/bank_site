@@ -2,6 +2,8 @@
 
 require_once('../../../private/initialize.php');
 
+require_login();
+
 if(request_is_post()){
     //handle form values sent by new.php
       $page = [];

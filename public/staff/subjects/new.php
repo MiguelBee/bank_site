@@ -1,6 +1,8 @@
 <?php
 require_once('../../../private/initialize.php');
 
+require_login();
+
 if(request_is_post()){
     $subject = [];
     $subject["menu_name"] = $_POST['menu_name'] ?? '';
