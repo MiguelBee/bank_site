@@ -8,13 +8,12 @@ if(!isset($_GET['id'])){
 }
 
 $id = $_GET['id'];
+$page = find_page_by_id($id);
 
 if(request_is_post()){
-    delete_page($id);
+    $result =  delete_page($id);
     $_SESSION['status_message'] = "You have successfully deleted the page";
-    redirect_to(url_for('/staff/pages/index.php'));
-} else {
-    $page = find_page_by_id($id);
+    redirect_to(url_for('/staff/subjects/show.php?id=' . h(u($page['subject_id']))));
 }
 ?>
 
@@ -23,7 +22,7 @@ if(request_is_post()){
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
 
 <div id="content">
-    <a class="back-link" href="<?php echo url_for('/staff/pages/index.php'); ?>">&laquo; Back to List</a><br />
+    <a class="back-link" href="<?php echo url_for('/staff/subjects/show.php?id=' . h(u($page['subject_id']))); ?>">&laquo; Back to subject</a><br />
     
     <div class="page delete">
         <h1>Delete Page</h1>

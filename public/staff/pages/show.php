@@ -11,6 +11,7 @@ require_login();
 $id = $_GET['id'] ?? '1'; //null coalesce operator
 
 $page = find_page_by_id($id);
+$subject = find_subject_by_id($page['subject_id'])
 
 ?><br />
 
@@ -19,14 +20,12 @@ $page = find_page_by_id($id);
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
 
 <div id="content">
-    <a class="back-link" href="<?php echo url_for('/staff/pages/index.php'); ?>">&laquo; Back to List</a><br />
+    <a class="back-link" href="<?php echo url_for('/staff/subjects/show.php?id=' . h(u($subject['id']))); ?>">&laquo; Back to subject</a><br />
 
     <div class="page show">
         Page: <?php echo h($page['menu_name']); ?>
     
         <div class="attributes">
-            
-            <?php $subject = find_subject_by_id($page['subject_id']); ?>
             
             <div class="actions">
                 <a class="action" href="<?php echo url_for('/index.php?id=' . h(u($page['id'])) . '&preview=true'); ?>" target="_blank">Preview</a>
